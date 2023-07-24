@@ -4,9 +4,12 @@
 
 // Includes
 #include "D3D.h"
+#include "Camera.h"
+#include "Model.h"
+#include "ColorShader.h"
 
 // Globals
-const bool FULL_SCREEN = true;
+const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = true;
 const float SCREEN_DEPTH = 1000.0f;
 const float SCREEN_NEAR = 0.3f;
@@ -28,6 +31,9 @@ private:
 private:
 	// Pointer to D3D object
 	D3D* m_d3d;
+	Camera* m_Camera;
+	Model* m_Model;
+	ColorShader* m_ColorShader;
 };
 
 #endif
