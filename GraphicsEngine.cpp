@@ -27,6 +27,7 @@ bool GraphicsEngine::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 {
 	bool res;
 	char textureFilename[128];
+	char modelFilename[128];
 	
 	// Initialize Direct3D object
 	m_d3d = new D3D;
@@ -42,6 +43,9 @@ bool GraphicsEngine::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_Camera = new Camera;
 	// Set default position of camera
 	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);
+
+	// Set the file name of the model.
+	strcpy_s(modelFilename, "Models/cube.txt");
 	
 	// Create and initilize model object
 	m_Model = new Model;
@@ -49,8 +53,7 @@ bool GraphicsEngine::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Set the name of the texture file that we will be loading.
 	strcpy_s(textureFilename, "Textures/stone01.tga");
 
-	res = m_Model->Initialize(m_d3d->GetDevice(), m_d3d->GetDeviceContext(), textureFilename); // added texture filename
-	if (!res)
+	res = m_Model->Initialize(m_d3d->GetDevice(), m_d3d->GetDeviceContext(), modelFilename, textureFilename);	if (!res)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object", L"Error", MB_OK);
 		return false;
