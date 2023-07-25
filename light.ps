@@ -7,7 +7,8 @@ cbuffer LightBuffer
     float4 ambientColor;
     float4 diffuseColor;
     float3 lightDirection;
-    float padding;
+    float specularPower; // added for specular
+    float4 specularColor;
 };
 
 // Type Defines
@@ -16,6 +17,7 @@ struct PixelInput
     float4 position : SV_POSITION;
     float2 uv : TEXCOORD0;
     float3 normal : NORMAL;
+    float3 viewDirection : TEXCOORD1;
 };
 
 float4 LightPixelShader(PixelInput input) : SV_TARGET
@@ -24,7 +26,8 @@ float4 LightPixelShader(PixelInput input) : SV_TARGET
     float3 lightDir;
     float lightIntensity;
     float4 color;
-
+    float3 reflection;
+    float4 specular;
 
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
     textureColor = shaderTexture.Sample(sample, input.uv);
@@ -32,23 +35,36 @@ float4 LightPixelShader(PixelInput input) : SV_TARGET
     // Set output color to ambient light value for all pixels
     color = ambientColor;
 
+    // Initialize specular color
+    specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+
     // Invert the light direction for calculations.
     lightDir = -lightDirection;
 
     // Calculate the amount of light on this pixel.
     lightIntensity = saturate(dot(input.normal, lightDir));
 
-    // Ambient Lighting 
+    // Ambient Lighting and Specular
     if (lightIntensity > 0.0f)
     {
         // Determine diffuse color based on diffuse color and light intensity
         color += (diffuseColor * lightIntensity);
+
+        // Saturate ambient and diffuse color
+        color = saturate(color);
+
+        // Calculate the reflection vector based on intensity, normal, light direction
+        reflection = normalize(2.0f * lightIntensity * input.normal - lightDir);
+
+        // Detemine amount of specular light based on reflection vector, viewing direction, specular power
+        specular = pow(saturate(dot(reflection, input.viewDirection)), specularPower);
     }
-    // Saturate final light color
-    color = saturate(color);
 
     // Multiply the texture pixel and the final diffuse color to get the final pixel color result.
     color = color * textureColor;
+
+    // Add specular component last
+    color = saturate(color + specular);
 
     return color;
 }

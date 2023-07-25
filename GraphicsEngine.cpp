@@ -42,10 +42,10 @@ bool GraphicsEngine::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Create camera
 	m_Camera = new Camera;
 	// Set default position of camera
-	m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
+	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);
 
 	// Set the file name of the model.
-	strcpy_s(modelFilename, "Models/cube.txt");
+	strcpy_s(modelFilename, "Models/sphere.txt");
 	
 	// Create and initilize model object
 	m_Model = new Model;
@@ -74,7 +74,9 @@ bool GraphicsEngine::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	m_Light->SetAmbientColor(.15f, 0.15f, 0.15f, 1.0f);
 	m_Light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_Light->SetDirection(1.0f, 0.0f, 0.0f);
+	m_Light->SetDirection(1.0f, 0.0f, 1.0f);
+	m_Light->SetSpecularColor(1.0f, 0.0f, 0.0f, 1.0f);
+	m_Light->SetSpecularPower(32.0f);
 
 	return true;
 }
@@ -167,7 +169,8 @@ bool GraphicsEngine::Render(float rotation)
 
 	// Render the model using the light shader.
 	res = m_LightShader->Render(m_d3d->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture(),
-		m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+		m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(),
+		m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
 	if (!res)
 	{
 		return false;
