@@ -6,7 +6,7 @@
 #include "D3D.h"
 #include "Camera.h"
 #include "Model.h"
-#include "ColorShader.h"
+#include "TextureShader.h"
 
 // Globals
 const bool FULL_SCREEN = false;
@@ -33,7 +33,7 @@ private:
 	D3D* m_d3d;
 	Camera* m_Camera;
 	Model* m_Model;
-	ColorShader* m_ColorShader;
+	TextureShader* m_TextureShader;
 };
 
 #endif

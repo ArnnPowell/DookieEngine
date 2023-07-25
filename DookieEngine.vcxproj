@@ -147,6 +147,8 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -156,10 +158,14 @@
     <ClInclude Include="GraphicsEngine.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureShader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="color.ps" />
     <None Include="color.vs" />
+    <None Include="texture.ps" />
+    <None Include="texture.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
