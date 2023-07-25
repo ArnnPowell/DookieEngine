@@ -72,8 +72,9 @@ bool GraphicsEngine::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Create and initialize the light object.
 	m_Light = new Light;
 
-	m_Light->SetDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);
-	m_Light->SetDirection(0.0f, 0.0f, 1.0f);
+	m_Light->SetAmbientColor(.15f, 0.15f, 0.15f, 1.0f);
+	m_Light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Light->SetDirection(1.0f, 0.0f, 0.0f);
 
 	return true;
 }
@@ -158,39 +159,15 @@ bool GraphicsEngine::Render(float rotation)
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_d3d->GetProjectionMatrix(projectionMatrix);
 
-	// Transform 1 - Rotation, translate to left
-	rotateMatrix = XMMatrixRotationY(rotation);  // Build the rotation matrix.
-	translateMatrix = XMMatrixTranslation(-2.0f, 0.0f, 0.0f);  // Build the translation matrix.
-
-	// Multiply them together to create the final world transformation matrix.
-	worldMatrix = XMMatrixMultiply(rotateMatrix, translateMatrix);
+	// Rotate the world matrix by the rotation value so that the model will spin.
+	worldMatrix = XMMatrixRotationY(rotation);
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_Model->Render(m_d3d->GetDeviceContext());
 
 	// Render the model using the light shader.
 	res = m_LightShader->Render(m_d3d->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture(),
-		m_Light->GetDirection(), m_Light->GetDiffuseColor());
-	if (!res)
-	{
-		return false;
-	}
-
-	// Transform 2 - Rotate, translate to right, scale down
-	scaleMatrix = XMMatrixScaling(0.5f, 0.5f, 0.5f);  // Build the scaling matrix.
-	rotateMatrix = XMMatrixRotationY(rotation);  // Build the rotation matrix.
-	translateMatrix = XMMatrixTranslation(2.0f, 0.0f, 0.0f);  // Build the translation matrix.
-
-	// Multiply the scale, rotation, and translation matrices together to create the final world transformation matrix.
-	srMatrix = XMMatrixMultiply(scaleMatrix, rotateMatrix);
-	worldMatrix = XMMatrixMultiply(srMatrix, translateMatrix);
-
-	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	m_Model->Render(m_d3d->GetDeviceContext());
-
-	// Render the model using the light shader.
-	res = m_LightShader->Render(m_d3d->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture(),
-		m_Light->GetDirection(), m_Light->GetDiffuseColor());
+		m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 	if (!res)
 	{
 		return false;
