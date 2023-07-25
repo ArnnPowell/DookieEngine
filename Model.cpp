@@ -7,8 +7,8 @@ Model::Model()
 	m_Texture = 0;
 }
 
-Model::Model(const Model& other) {};
-Model::~Model() {};
+Model::Model(const Model& other) {}
+Model::~Model() {}
 
 bool Model::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, char* textureFilename)
 {
@@ -89,12 +89,15 @@ bool Model::InitializeBuffers(ID3D11Device* device)
 	// Load the vertex array with data.
 	vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
 	vertices[0].uv = XMFLOAT2(0.0f, 1.0f);
+	vertices[0].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
 	vertices[1].position = XMFLOAT3(0.0f, 1.0f, 0.0f);  // Top middle.
 	vertices[1].uv = XMFLOAT2(0.5f, 0.0f);
+	vertices[1].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
 	vertices[2].position = XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
 	vertices[2].uv = XMFLOAT2(1.0f, 1.0f);
+	vertices[2].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
 	// Load the index array with data.
 	indices[0] = 0;  // Bottom left.
